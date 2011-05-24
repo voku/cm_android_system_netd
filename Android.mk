@@ -47,7 +47,6 @@ LOCAL_SRC_FILES:=                                      \
                   NatController.cpp                    \
                   PppController.cpp                    \
                   PanController.cpp                    \
-                  UsbController.cpp                    \
                   ThrottleController.cpp
 
 LOCAL_MODULE:= netd
@@ -63,6 +62,9 @@ LOCAL_CFLAGS += -DWIFI_DRIVER_FW_STA_PATH=\"$(WIFI_DRIVER_FW_STA_PATH)\"
 endif
 ifdef WIFI_DRIVER_FW_AP_PATH
 LOCAL_CFLAGS += -DWIFI_DRIVER_FW_AP_PATH=\"$(WIFI_DRIVER_FW_AP_PATH)\"
+endif
+ifdef WIFI_DRIVER_HAS_LGE_SOFTAP
+LOCAL_CFLAGS += -DLGE_SOFTAP
 endif
 
 #ifdef OMAP_ENHANCEMENT
@@ -95,6 +97,12 @@ endif
 
 ifeq ($(BOARD_USE_HTC_USB_FUNCTION_SWITCH),true)
   LOCAL_CFLAGS += -DUSE_HTC_USB_FUNCTION_SWITCH
+endif
+
+ifneq ($(BOARD_CUSTOM_USB_CONTROLLER),)
+  LOCAL_SRC_FILES += $(BOARD_CUSTOM_USB_CONTROLLER)
+else
+  LOCAL_SRC_FILES += UsbController.cpp
 endif
 
 include $(BUILD_EXECUTABLE)
